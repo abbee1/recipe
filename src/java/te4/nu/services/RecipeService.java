@@ -59,13 +59,29 @@ public class RecipeService {
 
         return Response.ok(data).build();
     }
+    
+    @GET
+    @Path("ingred/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getIngred(@PathParam("id") int id, @Context HttpHeaders httpHeaders){
+        
+        JsonArray data = recipeBean.getIngredients(id);
 
+        if (data == null) {
+            return Response.serverError().build();
+        }
+
+        return Response.ok(data).build();
+    }
+   
+    
     @POST
     @Path("recipe")
     @Produces(MediaType.APPLICATION_JSON)
     public Response addRecipe(String body, @Context HttpHeaders httpHeaders) {
         //måste vara inloggad inloggning kommer snenare
         if (!User.authoricate(httpHeaders)) {
+            System.out.println("nu fick du fel här");
             return Response.status(401).build();
         }
 

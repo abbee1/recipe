@@ -35,11 +35,13 @@ public class RecipeBean {
 
             JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
             while (data.next()) {
+                int id = data.getInt("r_id");
                 String name = data.getString("name");
                 String cat = data.getString("category");
                 String user = data.getString("username");
 
                 jsonArrayBuilder.add(Json.createObjectBuilder()
+                        .add("id", id)
                         .add("titel", name)
                         .add("category", cat)
                         .add("author", user).build());
@@ -84,6 +86,31 @@ public class RecipeBean {
         }
         return null;
     }
+    public JsonArray getIngredients(int id){
+        try {
+            Connection connection = ConnectionFactory.make("Server");
+            String sql = "SELECT * FROM `ingredientsvy` WHERE r_id =" + id;
+            Statement stmt = connection.createStatement();
+            ResultSet data = stmt.executeQuery(sql);
+
+            JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+            while (data.next()) {
+                int r_id = data.getInt("r_id");
+                String ingredients = data.getString("name");
+                String amount = data.getString("amount");
+
+                jsonArrayBuilder.add(Json.createObjectBuilder()
+                        .add("id", id)
+                        .add("ingredients", ingredients)
+                        .add("amount", amount).build());
+            }
+            connection.close();
+            return jsonArrayBuilder.build();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return null;
+    }
 
     public boolean addRecipe(String body) {
         try {
@@ -107,8 +134,8 @@ public class RecipeBean {
             return true;
         } catch (Exception e) {
             System.out.println("Error post: " + e.getMessage());
-            return false;
         }
+        return false;
     }
     
     public boolean addIngredients(int id,String body) {
@@ -134,7 +161,6 @@ public class RecipeBean {
             return false;
         }
     }
-    
 
     public boolean delRecipe(int id) {
         try {
@@ -148,7 +174,6 @@ public class RecipeBean {
             System.out.println("Error del: " + e.getMessage());
             return false;
         }
-
     }
     
     public boolean delIngr(int id, String ing) {
@@ -219,9 +244,4 @@ public class RecipeBean {
             return false;
         }
     }
-
-    
-    
-    
-
 }
