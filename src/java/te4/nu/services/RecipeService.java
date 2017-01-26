@@ -88,7 +88,7 @@ public class RecipeService {
     }
    
     @GET
-    @Path("recipeid")
+    @Path("recipeId")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLastId(@Context HttpHeaders httpHeaders) throws Exception{
         JsonArray data = recipeBean.getLastId();
@@ -118,7 +118,7 @@ public class RecipeService {
     }
 
     @POST
-    @Path("recipe/{id}")
+    @Path("ingred/{id}")
     public Response addIngredients(@PathParam("id") int id, String body, @Context HttpHeaders httpHeaders) {
         //måste vara inloggad
         if (!User.authoricate(httpHeaders)) {
