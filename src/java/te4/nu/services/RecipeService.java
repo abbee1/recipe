@@ -65,7 +65,20 @@ public class RecipeService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getIngred(@PathParam("id") int id, @Context HttpHeaders httpHeaders){
         
-        JsonArray data = recipeBean.getIngredients(id);
+        JsonArray data = recipeBean.getIngredient(id);
+
+        if (data == null) {
+            return Response.serverError().build();
+        }
+
+        return Response.ok(data).build();
+    }
+    @GET
+    @Path("ingred")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getIngred(@Context HttpHeaders httpHeaders){
+        
+        JsonArray data = recipeBean.getIngredients();
 
         if (data == null) {
             return Response.serverError().build();
@@ -74,6 +87,18 @@ public class RecipeService {
         return Response.ok(data).build();
     }
    
+    @GET
+    @Path("recipeid")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLastId(@Context HttpHeaders httpHeaders) throws Exception{
+        JsonArray data = recipeBean.getLastId();
+
+        if (data == null) {
+            return Response.serverError().build();
+        }
+
+        return Response.ok(data).build();
+    }
     
     @POST
     @Path("recipe")
